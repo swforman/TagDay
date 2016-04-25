@@ -1,0 +1,385 @@
+<?xml version="1.0"?>
+<project name="Amadeus Shared Build File" xmlns="http://nant.sf.net/release/0.85/nant.xsd">
+	<property name="environmentFilePath" value="${environment::get-variable('DEV_BUILD_ENVIRONMENT_PATH')}" failonerror="false" />
+	<property name="environmentFilePath" value="D:\Environment.include" overwrite="false" />
+	<include buildfile="${environmentFilePath}" />
+
+	<!-- The Big Show -->
+	<target name="build">
+    <call target="checkTags" />
+		<call target="getSubversionRevisionNumber" />
+		
+		<foreach item="String" in="${projectNames}" delim="," trim="Both" property="projectName">
+			<do>
+				<call target="setProjectVersion" />
+			</do>
+		</foreach>
+
+		<call target="compile" />
+		
+		<property name="event" value="validating" />
+		<call target="raiseEvent" />
+		
+		
+		<call target="deployArtifacts" />
+	</target>
+
+  <target
+   name="checkTags"
+   description="Checks to see if this build was triggered by a tag and updates the appropriate properties">
+
+    <echo message="Checking for updated tags . . ."/>
+
+    <property name="tagsDirectory"
+              value="${string::replace(project::get-base-directory(), '\Trunk', '\Tags')}"></property>
+
+    <echo message="Tags Directory: ${tagsDirectory}"/>
+
+    <!-- Set a default value for the last tag revision -->
+    <property name="lastTagRevision" value="00"/>
+    <property name="tagPath" value=""/>
+
+    <if test="${directory::exists(tagsDirectory)}">
+      <!-- Get the SVN Log for the last commit to the Tags directory -->
+      <exec
+        program="svn.exe"
+        commandline='log "${tagsDirectory}" --xml --limit 1 --verbose'
+        output="_tagrevision.xml"
+        failonerror="false"/>
+
+      <!-- Get the revision number from the log -->
+      <xmlpeek
+        file="_tagrevision.xml"
+        xpath="/log/logentry/@revision"
+        property="lastTagRevision"
+        failonerror="false"/>
+
+      <xmlpeek
+       file="_tagrevision.xml"
+       xpath="/log/logentry/paths/path[@action='A']"
+       property="tagPath"
+       failonerror="false"/>
+      <!-- /DCMT/Tags/1.0.111-Alpha -->
+
+      <echo message="Last Tag revision: ${lastTagRevision}"/>
+      <echo message="Tag path: ${tagPath}"/>
+    </if>
+
+    <call target="getSubversionRevisionNumber" />
+
+    <if test="${int::parse(lastTagRevision) > int::parse(svn.revision)}">
+      <!-- The tag is newer; build it -->
+      <property name="TagCCNetArtifactDirectory"
+                value="${CCNetArtifactDirectory}\Tags\${string::substring(tagPath, string::last-index-of(tagPath, '-') + 1, string::get-length(tagPath) - string::last-index-of(tagPath, '-') - 1)}" />
+      <echo message="CCNetArtifactDirectory changed to: ${TagCCNetArtifactDirectory}"/>
+
+      <property name="TagCCNetLabel"
+                value="${string::substring(tagPath, string::last-index-of(tagPath, '/'), string::last-index-of(tagPath, '-') - string::last-index-of(tagPath, '/'))}">
+      </property>
+      <echo message="CCNetLabel changed to: ${TagCCNetLabel}"/>
+
+    </if>
+
+  </target>
+  
+  
+	<!-- Events -->
+	<target name="subscribe">
+		<property name="eventListName" value="${event}.Subscribers" />
+		
+		<choose>
+			<when test="${not property::exists(eventListName)}">
+				<property name="${eventListName}" value="${subscriber}" />
+			</when>
+			<otherwise>
+				<property name="${eventListName}" value="${property::get-value(eventListName)},${subscriber}" />
+			</otherwise>
+		</choose>
+	</target>
+	
+	
+	<target name="raiseEvent">
+		<property name="eventListName" value="${event}.Subscribers" />
+		
+		<if test="${property::exists(eventListName)}">
+			<foreach item="String" in="${property::get-value(eventListName)}" delim="," trim="Both" property="subscriber">
+				<do>
+					<call target="${subscriber}" />
+				</do>
+			</foreach>
+		</if>
+	</target>
+	
+	
+	<!-- Event Definitions -->
+	<target name="deployArtifacts">
+		<property name="sourceLocation" value="${project::get-base-directory()}" />
+		<property name="artifactLocation" value="${CCNetArtifactDirectory}\${CCNetLabel}" />
+
+    <if test="${property::exists('TagCCNetArtifactDirectory')}">
+      <property name="artifactLocation" value="${TagCCNetArtifactDirectory}\${TagCCNetLabel}" />
+    </if>
+
+    <mkdir dir="${artifactLocation}" />
+		
+		<property name="event" value="artifactsDeploying" />
+		<call target="raiseEvent" />
+		
+		<!-- The project build file -->
+		<copy file="${sourceLocation}\ccnet.build" tofile="${artifactLocation}\ccnet2.build" />
+		
+		<!-- Include files -->
+		<copy todir="${artifactLocation}\BuildProcess">
+		    <fileset basedir="${sourceLocation}\BuildProcess">
+		        <include name="*.include" />
+		    </fileset>
+		</copy>
+		
+		
+		<property name="event" value="artifactsDeployed" />
+		<call target="raiseEvent" />
+	</target>
+	
+	
+	<target name="push">
+		<property name="artifactLocation" value="${directory::get-current-directory()}" unless="${property::exists('artifactLocation')}" />
+		<property name="version" value="${string::substring(directory::get-current-directory(), string::get-length(directory::get-parent-directory(directory::get-current-directory())) + 1, string::get-length(directory::get-current-directory()) - (string::get-length(directory::get-parent-directory(directory::get-current-directory())) + 1))}" />
+
+		<property name="event" value="pushing" />
+		<call target="raiseEvent" />
+		
+		<property name="event" value="pushed" />
+		<call target="raiseEvent" />
+	</target>
+	
+	
+	<!-- Helpers -->
+	<target
+	  name="getSubversionRevisionNumber"
+	  description="Gets the current project's SVN revision number and puts it in 'svn.revision'">
+
+		<echo message="Retrieving Subversion revision number"/>
+
+		<!-- Set a default value for the revision number property -->
+		<property name="svn.revision" value="00"/>
+
+		<!-- Get the SVN Log for the last commit as an xml file -->
+		<exec
+		  program="svn.exe"
+		  commandline='log "${project::get-base-directory()}" --xml --limit 1'
+		  output="_revision.xml"
+		  failonerror="false"/>
+
+		<!-- Get the revision number from the log -->
+		<xmlpeek
+		  file="_revision.xml"
+		  xpath="/log/logentry/@revision"
+		  property="svn.revision"
+		  failonerror="false"/>
+		<echo message="Using Subversion revision number: ${svn.revision}"/>
+	</target>
+	
+	
+	<target
+		name="setProjectVersion"
+		description="Updates the AssemblyInfo of a project/assembly before a build with the current version info">
+
+		<if test="${not property::exists('clsCompliant')}">
+			<property name="clsCompliant" value="true" />
+		</if>
+
+		<if test="${not property::exists('comVisible')}">
+			<property name="comVisible" value="false" />
+		</if>
+		
+		<if test="${not property::exists('assemblyLanguage')}">
+			<property name="assemblyLanguage" value="CSharp" />
+		</if>
+
+    <if test="${not property::exists('neutralResourcesLanguage')}">
+      <property name="neutralResourcesLanguage" value="en-US" />
+    </if>
+    
+		<if test="${assemblyLanguage == 'CSharp'}">
+			<property name="assemblyOutputPath" value="${projectName}\Properties\AssemblyInfo.cs" />
+		</if>
+		
+		<if test="${assemblyLanguage == 'VB'}">
+			<property name="assemblyOutputPath" value="${projectName}\AssemblyInfo.vb" />
+		</if>
+		
+
+		<asminfo output="${assemblyOutputPath}" language="${assemblyLanguage}">
+			<imports>
+				<import namespace="System" />
+				<import namespace="System.Reflection" />
+				<import namespace="System.Runtime.CompilerServices" />
+				<import namespace="System.Runtime.InteropServices" />
+        <import namespace="System.Resources" />
+			</imports>
+
+			<attributes>
+				<attribute type="AssemblyTitleAttribute" value="${clientName} ${projectName}" />
+				<attribute type="AssemblyCopyrightAttribute" value="Copyright &#169; Amadeus Consulting ${datetime::get-year(datetime::now())}" />
+				<attribute type="AssemblyVersionAttribute" value="${CCNetLabel}.${svn.revision}" />
+				<attribute type="AssemblyFileVersionAttribute" value="${CCNetLabel}.${svn.revision}" />
+				<attribute type="CLSCompliantAttribute" value="${clsCompliant}" />
+				<attribute type="ComVisibleAttribute" value="${comVisible}" />
+        <attribute type="NeutralResourcesLanguageAttribute" value="${neutralResourcesLanguage}" />
+			</attributes>
+
+			<references>
+				<include name="System.EnterpriseServices.dll" />
+			</references>
+
+		</asminfo>
+	</target>
+
+	<target
+	  name="createWebsiteZipFileSet"
+	  description="Creates a fileset for common website files that need to be deployed with ID 'WebsiteZipFileSet'"
+	  if="${property::exists('basedir')}">
+
+		<zipfileset id="WebsiteZipFileSet" basedir="${basedir}">
+			<!-- Subversion Files -->
+			<exclude name="**\_svn" />
+
+			<!--Static content files-->
+			<include name="**\*.css" />
+			<include name="**\*.htc" />
+			<include name="**\*.htm" />
+			<include name="**\*.html" />
+			<include name="**\*.js" />
+			<include name="**\*.htc" />
+			<include name="**\*.browser" />
+			<include name="**\*.xml" />
+			<include name="**\*.xsd" />
+			<include name="**\*.xsl" />
+			<include name="**\*.xslt" />
+			<include name="**\*.skin" />
+			<include name="**\*.swf" />
+			<include name="**\*.tdf" />
+			<include name="**\*.rdlc" />
+			<include name="**\*.xap" />
+
+			<!-- Images -->
+			<include name="**\*.bmp" />
+			<include name="**\*.gif" />
+			<include name="**\*.GIF" />
+			<include name="**\*.ico" />
+			<include name="**\*.jpg" />
+			<include name="**\*.JPG" />
+			<include name="**\*.png" />
+
+			<!-- Documents -->
+			<include name="**\*.pdf" />
+			<!--These are unknown-->
+			<include name="**\*.exelon" />
+			<include name="**\*.nu" />
+
+			<!-- ASP.NET files -->
+			<include name="**\*.asax" />
+			<include name="**\*.ascx" />
+			<include name="**\*.ashx" />
+			<include name="**\*.asmx" />
+			<include name="**\*.aspx" />
+			<include name="bin\*.dll" />
+			<include name="**\*.Master" />
+			<include name="**\*.master" />
+			<include name="**\*.resx" />
+			<include name="**\*.sitemap" />
+			<include name="**\*.svc" />
+			<!--Web.config is specifically not here to prevent accidental deployment of development settings to production environments-->
+		</zipfileset>
+	</target>
+
+	<target
+	  name="createWebsiteFileSet"
+	  description="Creates a fileset for common website files that need to be deployed with ID 'WebsiteFileSet'"
+	  if="${property::exists('basedir')}">
+
+		<fileset id="WebsiteFileSet" basedir="${basedir}">
+			<!-- Subversion Files -->
+			<exclude name="**\_svn" />
+
+			<!--Static content files-->
+			<include name="**\*.css" />
+			<include name="**\*.htc" />
+			<include name="**\*.htm" />
+			<include name="**\*.html" />
+			<include name="**\*.js" />
+			<include name="**\*.htc" />
+			<include name="**\*.browser" />
+			<include name="**\*.xml" />
+			<include name="**\*.xsd" />
+			<include name="**\*.xsl" />
+			<include name="**\*.xslt" />
+			<include name="**\*.skin" />
+			<include name="**\*.swf" />
+			<include name="**\*.tdf" />
+			<include name="**\*.rdlc" />
+			<include name="**\*.xap" />
+
+			<!-- Images -->
+			<include name="**\*.bmp" />
+			<include name="**\*.gif" />
+			<include name="**\*.GIF" />
+			<include name="**\*.ico" />
+			<include name="**\*.jpg" />
+			<include name="**\*.JPG" />
+			<include name="**\*.png" />
+
+			<!-- Documents -->
+			<include name="**\*.pdf" />
+			<!--These are unknown-->
+			<include name="**\*.exelon" />
+			<include name="**\*.nu" />
+
+			<!-- ASP.NET files -->
+			<include name="**\*.asax" />
+			<include name="**\*.ascx" />
+			<include name="**\*.ashx" />
+			<include name="**\*.asmx" />
+			<include name="**\*.aspx" />
+			<include name="bin\*.dll" />
+			<include name="**\*.Master" />
+			<include name="**\*.master" />
+			<include name="**\*.resx" />
+			<include name="**\*.sitemap" />
+			<include name="**\Web.config" />
+			<include name="**\*.svc" />
+		</fileset>
+	</target>
+	
+	<target name="updateWebServiceClientEndpointAddress">
+		<xmlpoke
+			file="${configFile}"
+			xpath="configuration/system.serviceModel/client/endpoint[@name='${endpointName}']/@address"
+			value="${address}" />
+	</target>
+
+	
+	<!-- Compressing JS and CSS -->
+	<target 
+		name="minifyFile"
+		description="Runs the YUI Compressor on a specified JavaScript or CSS file, replacing the original with the compressed version.">
+		<exec program="java">
+			<arg value="-jar" />
+			<arg value="C:\Program Files\YUICompressor\yuicompressor-2.4.2.jar" />
+			<arg value="-o" />
+			<arg file="${targetFileName}" />
+			<arg line="--nomunge --charset utf-8 --line-break 100" />
+			<arg file="${targetFileName}" />
+		</exec>
+	</target>
+	
+	<!-- Configuration file manipulation -->
+	<target
+		name="updateAppSetting"
+		description="Updates an application setting in the file 'configFile' with the key 'appSettingKey' with the value 'appSettingValue'">
+		<xmlpoke
+			file="${configFile}"
+			xpath="/configuration/appSettings/add[@key='${appSettingKey}']/@value"
+			value="${appSettingValue}" />
+	</target>
+</project>

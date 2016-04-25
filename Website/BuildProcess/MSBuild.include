@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<project name="MSBuild block" xmlns="http://nant.sf.net/release/0.85/nant.xsd">
+	<!-- 
+		Required Properties
+		
+		compile.Solution 	- The file name (without extension) of the solution to build.
+	-->
+	
+	<target name="compile">
+		<exec
+			program="C:\WINDOWS\Microsoft.NET\Framework\v4.0.30319\MSBuild.exe"
+			commandline="&quot;${project::get-base-directory()}\${compile.Solution}&quot; /p:FxCopDir=&quot;C:\Program Files\Microsoft Visual Studio 9.0\Team Tools\Static Analysis Tools\FxCop&quot;;Configuration=Release /v:diag /t:Clean,Build" />
+	</target>
+</project>

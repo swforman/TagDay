@@ -1,0 +1,53 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApp", "WebApp\WebApp.csproj", "{942214FA-0595-492B-839B-E216766BC68E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BuildProcess", "BuildProcess", "{ABD5BC36-74D4-4DAF-9BA4-90FE85C4CD02}"
+	ProjectSection(SolutionItems) = preProject
+		BuildProcess\Amadeus.include = BuildProcess\Amadeus.include
+		BuildProcess\Deployment.WebApplication.include = BuildProcess\Deployment.WebApplication.include
+		BuildProcess\MSBuild.include = BuildProcess\MSBuild.include
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApplication1", "WebApplication1\WebApplication1.csproj", "{110D925D-617C-4323-A087-124125FABE19}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug (No Data.Template)|Any CPU = Debug (No Data.Template)|Any CPU
+		Debug + Template|Any CPU = Debug + Template|Any CPU
+		Debug|Any CPU = Debug|Any CPU
+		Release (No Data.Template)|Any CPU = Release (No Data.Template)|Any CPU
+		Release + Data.Template|Any CPU = Release + Data.Template|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{942214FA-0595-492B-839B-E216766BC68E}.Debug (No Data.Template)|Any CPU.ActiveCfg = Debug|Any CPU
+		{942214FA-0595-492B-839B-E216766BC68E}.Debug (No Data.Template)|Any CPU.Build.0 = Debug|Any CPU
+		{942214FA-0595-492B-839B-E216766BC68E}.Debug + Template|Any CPU.ActiveCfg = Debug|Any CPU
+		{942214FA-0595-492B-839B-E216766BC68E}.Debug + Template|Any CPU.Build.0 = Debug|Any CPU
+		{942214FA-0595-492B-839B-E216766BC68E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{942214FA-0595-492B-839B-E216766BC68E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{942214FA-0595-492B-839B-E216766BC68E}.Release (No Data.Template)|Any CPU.ActiveCfg = Release|Any CPU
+		{942214FA-0595-492B-839B-E216766BC68E}.Release (No Data.Template)|Any CPU.Build.0 = Release|Any CPU
+		{942214FA-0595-492B-839B-E216766BC68E}.Release + Data.Template|Any CPU.ActiveCfg = Release|Any CPU
+		{942214FA-0595-492B-839B-E216766BC68E}.Release + Data.Template|Any CPU.Build.0 = Release|Any CPU
+		{942214FA-0595-492B-839B-E216766BC68E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{942214FA-0595-492B-839B-E216766BC68E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{110D925D-617C-4323-A087-124125FABE19}.Debug (No Data.Template)|Any CPU.ActiveCfg = Debug|Any CPU
+		{110D925D-617C-4323-A087-124125FABE19}.Debug (No Data.Template)|Any CPU.Build.0 = Debug|Any CPU
+		{110D925D-617C-4323-A087-124125FABE19}.Debug + Template|Any CPU.ActiveCfg = Debug|Any CPU
+		{110D925D-617C-4323-A087-124125FABE19}.Debug + Template|Any CPU.Build.0 = Debug|Any CPU
+		{110D925D-617C-4323-A087-124125FABE19}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{110D925D-617C-4323-A087-124125FABE19}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{110D925D-617C-4323-A087-124125FABE19}.Release (No Data.Template)|Any CPU.ActiveCfg = Release|Any CPU
+		{110D925D-617C-4323-A087-124125FABE19}.Release (No Data.Template)|Any CPU.Build.0 = Release|Any CPU
+		{110D925D-617C-4323-A087-124125FABE19}.Release + Data.Template|Any CPU.ActiveCfg = Release|Any CPU
+		{110D925D-617C-4323-A087-124125FABE19}.Release + Data.Template|Any CPU.Build.0 = Release|Any CPU
+		{110D925D-617C-4323-A087-124125FABE19}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{110D925D-617C-4323-A087-124125FABE19}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

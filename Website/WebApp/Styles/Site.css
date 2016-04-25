@@ -1,0 +1,261 @@
+﻿.clear { clear: both; }
+
+/*Template*/
+body {
+	padding:0;
+	margin:0;
+	font-family:Helvetica, Arial, sans-serif;
+	font-size:14px;
+	color:#787878;
+	line-height:130%;
+	background:#fff;
+}
+
+img a:link, img a:visited, img a:hover {border:0;}
+
+h1 {font-size:17px; color:#787878; font-weight:normal; text-transform:uppercase;}
+
+a:link, a:visited {color:#053447;}
+
+a:hover {color:#65BB28;}
+
+input {margin:0 0 5px 0;}
+
+#container {
+	width:960px;
+	margin:15px auto;
+}
+
+#PropertySearchLabel {display:block; float:left; margin-right:10px;}
+
+#header {
+	width:960px;
+	height:150px;
+}
+
+#header .search {
+	float:right;
+	display:block;
+	font-size:12px;
+	width:380px;
+}
+
+.propertySearchButton a:link, .propertySearchButton a:visited, propertySearchButton {
+	width:107px;
+	height:20px;
+	float:right;
+	text-indent:-9000px;
+	display:block;
+	background:url(Images/PropSearch_button.png) bottom left no-repeat;
+}
+
+.propertySearchButton a:hover {
+	background-position: top left;
+}
+
+#header .main {
+	margin-right:400px;
+}
+
+.main #Logo {
+	width:150px;
+	height:125px;
+	display:block;
+	float:left;
+}
+
+.main h1 {
+	font-size:12px;
+	color:#005F75;
+	margin:-25px 0px 10px 165px;
+	text-transform:none;
+}
+
+#footer {
+	margin:20px 0px 40px 0px;
+	font-size:12px;
+	clear:both;
+	display:block;
+	text-align:center;
+}
+
+#footer a:link, #footer a:visited {
+	text-decoration:none;
+	color:#787878;
+}
+
+#footer a:hover {
+	color:#053447;
+	text-decoration:underline;
+}
+	
+/*Home Styles*/
+
+.slideshow {
+	width:960;
+	height:420px;
+	margin:0px 0px 20px 0px;
+}
+
+.primaryMarkets {
+	float:left;
+	width:300px;
+	display:block;
+	padding-right:20px;
+	border-right:1px solid #c7c7c7;
+}
+
+.propertyMap {
+	float:left;
+	width:410px;
+	display:block;
+	padding:0 20px;
+	border-right:1px solid #c7c7c7;
+}
+
+.propertySearch {
+	margin:0px 0px 20px 770px;
+	padding-left:20px;
+}
+
+.propertySearch span {padding-top:7px; display:block;}
+
+.primaryMarkets .left {
+	float:left;
+	width:145px;
+}
+
+.primaryMarkets .right {
+	margin-left:150px;
+}
+
+.primaryMarkets a:link, .primaryMarkets a:visited, .primaryMarkets a:hover {
+	margin-bottom:5px;
+}
+
+.masterPropertyList a:link, .masterPropertyList a:visited {
+	width:171px;
+	height:20px;
+	float:right;
+	text-indent:-9000px;
+	display:block;
+	background:url(Images/MasterPropList_button.png) bottom left no-repeat;
+}
+
+.masterPropertyList a:hover {
+	background-position: top left;
+}
+
+.searchButton a:link, .searchButton a:visited {
+	width:171px;
+	height:20px;
+	float:right;
+	text-indent:-9000px;
+	display:block;
+	background:url(Images/search_button.png) bottom left no-repeat;
+}
+
+.searchButton a:hover {
+	background-position: top left;
+}
+
+
+/*Landing Styles*/
+.landingSidebar 
+{
+    float:left;
+    width:225px;
+    margin-right:20px;
+    display:block;
+}
+
+.landingContent 
+{
+    margin-left:245px;
+    display:block;
+}
+
+.landingContent .cta 
+{
+    float:left;
+    width:220px;
+    margin-right:20px;
+    display:block;
+}
+
+.landingContent .vp1 
+{
+    float:left;
+    width:220px;
+    margin-right:20px;
+    display:block;
+}
+
+.landingContent .vp2
+{
+    margin-left:500px;
+    display:block;
+}
+
+/*SubPage Styles*/
+
+.subpageLeftSidebar 
+{
+    float:left;
+    width:225px;
+    margin-right:20px;
+    display:block;
+}
+
+.subpageContent 
+{
+    float:left;
+    display:block;
+    width:460px;
+    margin-right:20px;
+}
+
+.subpageRightSidebar 
+{
+    margin-left:725px;
+}
+
+/*Nav Styles*/
+#NavigationMenu 
+{
+    width:960px;
+    display:block;
+    border-top:1px solid #c7c7c7;
+    padding-top:10px;
+    text-transform:uppercase;
+}
+
+.RadMenu_Default {
+    background: none !important;
+    border:none !important;
+    text-align:left !important;
+}
+
+.RadMenu_Default .rmHorizontal .rmItem  {border-right:none !important;}
+
+.RadMenu_Default .rmLink { color:#787878 !important;}
+
+.RadMenu_Default .rmText {padding:0 30px 5px 7px !important; font-size:15px !important;}
+
+.RadMenu_Default .rmHorizontal .rmLast .rmText {padding-right:0 !important;}
+
+.RadMenu_Default .rmGroup {border:none !important;}
+
+.RadMenu ul.rmHorizontal, .RadMenu ul.rmVertical { background:url(/Images/navBg.png) repeat !important;}
+
+.subnavItem {text-transform:none;  padding: 7px 7px 7px 0px;}
+
+.RadMenu_Default .rmGroup .rmLink:hover, .RadMenu_Default .rmGroup .rmFocused, .RadMenu_Default .rmGroup .rmExpanded 
+{
+    background:none !important;
+    color:#053447 !important;
+    font-size:13px !important;
+   background:url(/Images/navBg.png) repeat !important;
+}
+
+span .rmText .rmExpandDown { color:#FF0000 !important;}

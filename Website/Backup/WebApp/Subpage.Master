@@ -1,0 +1,124 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Subpage.Master.cs" Inherits="WebApp.SiteMaster" %>
+
+<%@ Register Assembly="Telerik.Web.UI" Namespace="Telerik.Web.UI" TagPrefix="telerik" %>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head runat="server">
+    <title></title>
+    <link href="~/Styles/Site.css" rel="stylesheet" type="text/css" />
+	<asp:ContentPlaceHolder ID="HeadContent" runat="server">
+    </asp:ContentPlaceHolder>
+</head>
+<body>
+    <form runat="server">
+	<telerik:RadScriptManager ID="ScriptManager" runat="server">
+	</telerik:RadScriptManager>
+    <div id="container">
+        <div id="header">
+            <div class="search">
+				<asp:Label ID="PropertySearchLabel" runat="server" Text="Keyword Search by Name, State, Tenant, etc..."></asp:Label>
+				<asp:ImageButton ID="PropertySearchButton" runat="server" AlternateText="Property Search" ImageUrl="~/Images/PropSearch_button.png" />
+			</div>
+            <div class="main">
+				<asp:ImageButton ID="LogoImage" runat="server"  
+					AlternateText="Equity One Logo" 
+					ImageUrl="~/Images/E1_Logo.jpg"  
+					PostBackUrl="~/Default.aspx" />
+				<h1><asp:Label ID="LogoLabel" runat="server" Text="Owner and developer of shopping centers in urban markets."></asp:Label></h1>
+            </div>
+			
+			<div>
+				<telerik:RadMenu ID="NavigationMenu" runat="server">
+					<Items>
+						<telerik:RadMenuItem runat="server" Text="Properties">
+							<Items>
+								<telerik:RadMenuItem runat="server" Text="Outparcels" CssClass="subnavItem">
+								</telerik:RadMenuItem>
+							</Items>
+						</telerik:RadMenuItem>
+						<telerik:RadMenuItem runat="server" Text="Development">
+						</telerik:RadMenuItem>
+						<telerik:RadMenuItem runat="server" Text="Acquisitions">
+							<Items>
+								<telerik:RadMenuItem runat="server" Text="Acquisitions Criteria" CssClass="subnavItem">
+								</telerik:RadMenuItem>
+							</Items>
+						</telerik:RadMenuItem>
+						<telerik:RadMenuItem runat="server" Text="Tenant Services">
+						</telerik:RadMenuItem>
+						<telerik:RadMenuItem runat="server" Text="Investors">
+							<Items>
+								<telerik:RadMenuItem runat="server" Text="Dividend History" CssClass="subnavItem">
+								</telerik:RadMenuItem>
+								<telerik:RadMenuItem runat="server" Text="Annual Reports" CssClass="subnavItem">
+								</telerik:RadMenuItem>
+								<telerik:RadMenuItem runat="server" Text="SEC Quarterly &amp; Annual Filings" CssClass="subnavItem">
+								</telerik:RadMenuItem>
+								<telerik:RadMenuItem runat="server" Text="Press Releases" CssClass="subnavItem">
+								</telerik:RadMenuItem>
+								<telerik:RadMenuItem runat="server" Text="Portfolio Demographics" CssClass="subnavItem">
+								</telerik:RadMenuItem>
+								<telerik:RadMenuItem runat="server" Text="SEC - All Filings" CssClass="subnavItem">
+								</telerik:RadMenuItem>
+								<telerik:RadMenuItem runat="server" Text="SEC - Section 16" CssClass="subnavItem">
+								</telerik:RadMenuItem>
+							</Items>
+						</telerik:RadMenuItem>
+						<telerik:RadMenuItem runat="server" Text="About Us">
+							<Items>
+								<telerik:RadMenuItem runat="server" Text="Executive Team" CssClass="subnavItem">
+								</telerik:RadMenuItem>
+								<telerik:RadMenuItem runat="server" Text="Board of Directors" CssClass="subnavItem">
+								</telerik:RadMenuItem>
+								<telerik:RadMenuItem runat="server" Text="Corporate Governance" CssClass="subnavItem">
+								</telerik:RadMenuItem>
+								<telerik:RadMenuItem runat="server" Text="Careers" CssClass="subnavItem">
+								</telerik:RadMenuItem>
+								<telerik:RadMenuItem runat="server" Text="Equigreen" CssClass="subnavItem">
+								</telerik:RadMenuItem>
+								<telerik:RadMenuItem runat="server" Text="Contact Us" CssClass="subnavItem">
+								</telerik:RadMenuItem>
+							</Items>
+						</telerik:RadMenuItem>
+						<telerik:RadMenuItem runat="server" Text="Contact Us">
+						</telerik:RadMenuItem>
+					</Items>
+				</telerik:RadMenu>
+            </div>
+        </div>
+        <div>
+            <asp:ContentPlaceHolder ID="MainContent" runat="server"/>
+        </div>
+    
+    <div class="subpageLeftSidebar">
+    Hello
+    </div>
+
+    <div class="subpageContent">
+    <h1>Page Title</h1>
+    </div> 
+
+    <div class="subpageRightSidebar">
+    Hello
+    </div>
+    
+    <div id="footer">
+		<%= WebApp.SiteMaster.CopyrightText %>
+        <asp:Label runat="server" Text="|" />
+		<asp:LinkButton ID="SiteIndexLink" runat="server">Site Index</asp:LinkButton>
+		<asp:Label runat="server" Text="|" />
+		<asp:LinkButton ID="PrivacyPolicyLink" runat="server">Privacy Policy</asp:LinkButton>
+		<asp:Label runat="server" Text="|" />
+		<asp:LinkButton ID="EmailLink" runat="server">Email This Page</asp:LinkButton>
+		<asp:Label runat="server" Text="|" />
+		<asp:LinkButton ID="CareersLink" runat="server">Careers</asp:LinkButton>
+		<asp:Label runat="server" Text="|" />
+		<asp:LinkButton ID="ContactUsLink" runat="server">Contact Us</asp:LinkButton>
+    </div>
+</div>
+
+
+    </form>
+</body>
+</html>
